@@ -195,8 +195,8 @@ Gaming, Reading, Programming`;  // Your interactive resume content
   }
 
   update() {
-    // If within the first 3 seconds, start displaying text
-    if (millis() - this.startTime < 3000) {
+    // Start displaying the text 2 seconds after the special sprite
+    if (millis() - specialSpriteInstance.startTime >= 2000) {
       this.active = true;
     }
 
