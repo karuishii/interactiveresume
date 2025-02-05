@@ -43,9 +43,6 @@ let groundTexture;
 let specialSprite;
 let specialSpriteInstance; // To manage the sprite's behavior
 
-// InformationText instance
-let infoTextInstance; // For the interactive resume text
-
 // Game state
 let gameOver = false;
 
@@ -65,9 +62,6 @@ function setup() {
 
   // Initialize the special sprite instance
   specialSpriteInstance = new SpecialSprite();
-
-  // Initialize the information text
-  infoTextInstance = new InformationText();  // Add this line
 }
 
 function draw() {
@@ -140,10 +134,6 @@ function draw() {
   // Update and display the special sprite
   specialSpriteInstance.update();
   specialSpriteInstance.display();
-
-  // Update and display the information text
-  infoTextInstance.update();
-  infoTextInstance.display();
 }
 
 class SpecialSprite {
@@ -175,58 +165,6 @@ class SpecialSprite {
   display() {
     if (this.active) {
       image(specialSprite, this.x, this.y);
-    }
-  }
-}
-
-class InformationText {
-  constructor() {
-    this.x = width; // Start off-screen
-    this.y = height / 2.5; // Set its vertical position
-    this.text = `Skills:
-JavaScript, HTML, CSS
-Experience:
-1 Year of Web Development
-Hobbies:
-Gaming, Reading, Programming`;  // Your interactive resume content
-    this.speed = 3;  // Speed at which the text moves
-    this.active = false; // Initially inactive
-    this.startTime = null; // Will be set when special sprite appears
-  }
-
-  update() {
-    // Set start time when special sprite first becomes active
-    if (specialSpriteInstance.active && this.startTime === null) {
-      this.startTime = millis();
-    }
-
-    // Start displaying 2 seconds after the special sprite appears
-    if (this.startTime !== null && millis() - this.startTime >= 5000) {
-      this.active = true;
-    }
-
-    // Move text left if active
-    if (this.active) {
-      this.x -= this.speed;
-    }
-  }
-
-  display() {
-    if (this.active) {
-      fill(255, 255, 0); // Yellow text color
-      textFont(infoTextFont, 32); // Font and size
-      textAlign(LEFT, TOP); // Align from the left
-      text(this.text, this.x, this.y);
-    }
-  }
-}
-
-  display() {
-    if (this.active) {
-      fill(255, 255, 0); // Text color (yellow)
-      textFont(infoTextFont, 32); // Set the font and size
-      textAlign(LEFT, TOP); // Align text from the left
-      text(this.text, this.x, this.y);
     }
   }
 }
