@@ -191,30 +191,31 @@ Hobbies:
 Gaming, Reading, Programming`;  // Your interactive resume content
     this.speed = 2;  // Speed at which the text moves
     this.active = false; // Initially inactive
-    this.startTime = millis();  // Store when to start displaying
+    this.startTime = null; // Will be set when special sprite appears
   }
 
   update() {
-    // Start displaying the text 2 seconds after the special sprite
-    if (millis() - specialSpriteInstance.startTime >= 2000) {
+    // Set start time when special sprite first becomes active
+    if (specialSpriteInstance.active && this.startTime === null) {
+      this.startTime = millis();
+    }
+
+    // Start displaying 2 seconds after the special sprite appears
+    if (this.startTime !== null && millis() - this.startTime >= 2000) {
       this.active = true;
     }
 
+    // Move text left if active
     if (this.active) {
-      this.x -= this.speed; // Move text leftward
-    }
-
-    // Stop drawing the text if it moves off the screen
-    if (this.x + textWidth(this.text) < 0) {
-      this.active = false;
+      this.x -= this.speed;
     }
   }
 
   display() {
     if (this.active) {
-      fill(255, 255, 0); // Text color (yellow)
-      textFont(infoTextFont, 32); // Set the font and size
-      textAlign(LEFT, TOP); // Align text from the left
+      fill(255, 255, 0); // Yellow text color
+      textFont(infoTextFont, 32); // Font and size
+      textAlign(LEFT, TOP); // Align from the left
       text(this.text, this.x, this.y);
     }
   }
