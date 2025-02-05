@@ -14,6 +14,7 @@ let groundHeight = 50;
 let groundX = 0;
 let groundSpeed = 4; // Same as obstacle speed for consistency
 let groundImageHeight = 100; // Adjust this value as needed
+let infoTextFont;
 
 // Cloud variables
 let cloudSpriteSheet;
@@ -42,6 +43,9 @@ let groundTexture;
 let specialSprite;
 let specialSpriteInstance; // To manage the sprite's behavior
 
+// InformationText instance
+let infoTextInstance; // For the interactive resume text
+
 // Game state
 let gameOver = false;
 
@@ -51,6 +55,7 @@ function preload() {
   bgImage = loadImage("images/background1.png");
   groundTexture = loadImage("images/ground.png"); // Replace with your ground texture URL
   specialSprite = loadImage("images/int_resume.png");  // Preload the special sprite image
+  infoTextFont = loadFont('fonts/PixeloidSans-Bold.ttf');
 }
 
 function setup() {
@@ -60,6 +65,9 @@ function setup() {
 
   // Initialize the special sprite instance
   specialSpriteInstance = new SpecialSprite();
+
+  // Initialize the information text
+  infoTextInstance = new InformationText();  // Add this line
 }
 
 function draw() {
@@ -132,6 +140,10 @@ function draw() {
   // Update and display the special sprite
   specialSpriteInstance.update();
   specialSpriteInstance.display();
+
+  // Update and display the information text
+  infoTextInstance.update();
+  infoTextInstance.display();
 }
 
 class SpecialSprite {
@@ -163,6 +175,47 @@ class SpecialSprite {
   display() {
     if (this.active) {
       image(specialSprite, this.x, this.y);
+    }
+  }
+}
+
+class InformationText {
+  constructor() {
+    this.x = width; // Start off-screen
+    this.y = height / 2.5; // Set its vertical position
+    this.text = `Skills:
+JavaScript, HTML, CSS
+Experience:
+1 Year of Web Development
+Hobbies:
+Gaming, Reading, Programming`;  // Your interactive resume content
+    this.speed = 2;  // Speed at which the text moves
+    this.active = false; // Initially inactive
+    this.startTime = millis();  // Store when to start displaying
+  }
+
+  update() {
+    // If within the first 3 seconds, start displaying text
+    if (millis() - this.startTime < 3000) {
+      this.active = true;
+    }
+
+    if (this.active) {
+      this.x -= this.speed; // Move text leftward
+    }
+
+    // Stop drawing the text if it moves off the screen
+    if (this.x + textWidth(this.text) < 0) {
+      this.active = false;
+    }
+  }
+
+  display() {
+    if (this.active) {
+      fill(255, 255, 0); // Text color (yellow)
+      textFont(infoTextFont, 32); // Set the font and size
+      textAlign(LEFT, TOP); // Align text from the left
+      text(this.text, this.x, this.y);
     }
   }
 }
