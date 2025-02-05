@@ -189,15 +189,16 @@ Experience:
 1 Year of Web Development
 Hobbies:
 Gaming, Reading, Programming`;  // Your interactive resume content
-    this.speed = 2;  // Speed at which the text moves
+    this.speed = 4;  // Speed at which the text moves
     this.active = false; // Initially inactive
     this.startTime = null; // Will be set when special sprite appears
   }
 
   update() {
     // Set start time when special sprite first becomes active
-    if (specialSpriteInstance.active && this.startTime === null) {
-      this.startTime = millis();
+if (specialSpriteInstance.x < width / 2 && this.startTime === null) {
+  this.startTime = millis(); 
+}
     }
 
     // Start displaying 2 seconds after the special sprite appears
