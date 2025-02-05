@@ -15,6 +15,7 @@ let groundX = 0;
 let groundSpeed = 4; // Same as obstacle speed for consistency
 let groundImageHeight = 100; // Adjust this value as needed
 let infoTextFont;
+let infoText;
 
 // Cloud variables
 let cloudSpriteSheet;
@@ -66,8 +67,8 @@ function setup() {
   // Initialize the special sprite instance
   specialSpriteInstance = new SpecialSprite();
 
-  // Initialize the information text
-  infoTextInstance = new InformationText();  // Add this line
+  // Initialize Information Text
+  infoText = new InformationText("Welcome to My Interactive Resume!", width / 2, height / 2, color(255, 255, 0)); // Yellow Text
 }
 
 function draw() {
@@ -137,13 +138,13 @@ function draw() {
     frameCounter = 0;
   }
 
-  // Update and display the special sprite
+  // Update & Display Game Elements
   specialSpriteInstance.update();
   specialSpriteInstance.display();
 
-  // Update and display the information text
-  infoTextInstance.update();
-  infoTextInstance.display();
+  // Update & Display Information Text
+  infoText.update();
+  infoText.display();
 }
 
 class SpecialSprite {
@@ -180,47 +181,35 @@ class SpecialSprite {
 }
 
 class InformationText {
-  constructor() {
-    this.x = width; // Start off-screen
-    this.y = height / 2.5; // Set its vertical position
-    this.text = `Skills:
-JavaScript, HTML, CSS
-Experience:
-1 Year of Web Development
-Hobbies:
-Gaming, Reading, Programming`;  // Your interactive resume content
-    this.speed = 4;  // Speed at which the text moves
-    this.active = false; // Initially inactive
-    this.startTime = null; // Will be set when special sprite appears
+  constructor(text, x, y, color) {
+    this.text = text;
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.startTime = null; // Start time for showing text
   }
 
   update() {
-    // Set start time when special sprite first becomes active
-if (specialSpriteInstance.x < width / 2 && this.startTime === null) {
-  this.startTime = millis(); 
-}
-    }
-
-    // Start displaying 2 seconds after the special sprite appears
-    if (this.startTime !== null && millis() - this.startTime >= 2000) {
-      this.active = true;
-    }
-
-    // Move text left if active
-    if (this.active) {
-      this.x -= this.speed;
+    // Start counting 2 seconds AFTER the special sprite appears
+    if (specialSpriteInstance.active && this.startTime === null) {
+      this.startTime = millis(); 
     }
   }
 
   display() {
-    if (this.active) {
-      fill(255, 255, 0); // Yellow text color
-      textFont(infoTextFont, 32); // Font and size
-      textAlign(LEFT, TOP); // Align from the left
+    if (this.startTime !== null && millis() - this.startTime >= 2000) {
+      textSize(32);
+      textAlign(CENTER, CENTER);
+
+      // Shadow Effect (Outline)
+      stroke(0);  // Black outline
+      strokeWeight(6); // Shadow thickness
+      fill(this.color); // Main text color
       text(this.text, this.x, this.y);
     }
   }
 }
+
 
 class Cloud {
   constructor() {
